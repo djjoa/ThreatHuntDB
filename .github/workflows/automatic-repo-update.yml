@@ -26,6 +26,10 @@ jobs:
         run: |
           echo "Auto pulled content on $(date)" >> README.md
           cat README.md
+          
+      - name: Switch from HTTPs to SSH 
+        run: git remote set-url origin ${{ secrets.DEPLOY_KEY }}
+        
       - name: Push to repository
         run: |
           git config --global user.name "threathuntdb-actionbot"
