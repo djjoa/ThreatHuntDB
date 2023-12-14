@@ -28,7 +28,7 @@ jobs:
           cat README.md
           
       - name: Switch from HTTPs to SSH 
-        run: git remote set-url origin ${{ secrets.DEPLOY_KEY }}
+        run: git remote set-url origin ${{ secrets.ssh_url }}
         
       - name: Push to repository
         run: |
