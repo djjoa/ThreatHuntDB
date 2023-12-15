@@ -10,12 +10,12 @@ jobs:
           persist-credentials: false
 
       - name: Fetch API Data 📦
-        uses: JamesIves/fetch-api-data-action@releases/v1
+        uses: JamesIves/fetch-api-data-action@v2.4.0
         with:
           ENDPOINT: https://content.splunkresearch.com/detections
           retry: true
       - name: Build and Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v4
+        uses: JamesIves/github-pages-deploy-action@releases/v4.5.0
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           branch: main # Pushes the updates to the master branch.
