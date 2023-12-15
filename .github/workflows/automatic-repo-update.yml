@@ -1,6 +1,8 @@
 name: GitHub Self-Updating Repository Demo
 
 on:
+  workflow_dispatch
+  
   # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule
   #schedule:
     # The shortest interval you can run scheduled workflows is once every 5 minutes.
@@ -11,7 +13,7 @@ on:
     # - cron: '*/5 * * * *'
     # At the beginning of every day.
     #- cron: "0 0 * * *"
-    workflow_dispatch
+    
 
 # on: [push]
 
@@ -26,15 +28,23 @@ jobs:
         run: |
           echo "Auto pulled content on $(date)" >> README.md
           cat README.md
+
+      - name: Deploy 
+        uses: JamesIves/github-pages-deploy-action@v4
+        with: 
+          branch: main # where you want to deploy
+          commit-message: "testing deployment" #msg
+          folder: data
+          ssh-key: ${{ secrets.DEPLOY_KEY }} 
           
-      - name: Switch from HTTPs to SSH 
-        run: git remote set-url origin ${{ secrets.ssh_url }}
+      # - name: Switch from HTTPs to SSH 
+      #   run: git remote set-url origin ${{ secrets.ssh_url }}
         
-      - name: Push to repository
-        run: |
-          git config --global user.name "threathuntdb-actionbot"
-          git config --global user.email threathuntdb-actionbot"@github.com"
-          now=$(date)
-          git add -A
-          git commit -m "Auto Push on $now"
-          git push
+      # - name: Push to repository
+      #   run: |
+      #     git config --global user.name "threathuntdb-actionbot"
+      #     git config --global user.email threathuntdb-actionbot"@github.com"
+      #     now=$(date)
+      #     git add -A
+      #     git commit -m "Auto Push on $now"
+      #     git push
