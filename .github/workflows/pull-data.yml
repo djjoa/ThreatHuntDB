@@ -3,6 +3,7 @@ on: workflow_dispatch
 jobs:
   update-splunk-detections:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4 # check out the the ThreatHuntDB repo 
