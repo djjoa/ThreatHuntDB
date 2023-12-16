@@ -8,7 +8,8 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4 # check out the the ThreatHuntDB repo 
-        #with:
+        with:
+          token: ${{ secrets.TOKEN }}
           #persist-credentials: true
           #ssh-key: ${{ secrets.DEPLOY_KEY }}
         
