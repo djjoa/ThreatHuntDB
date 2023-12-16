@@ -24,11 +24,8 @@ jobs:
 
           git add ./data/splunk-detections.json 
           git commit -m "Updated ThreatHuntDB with latest Splunk detections and hunts."
-          
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          git push 
+
       # - uses: EndBug/add-and-commit@v9 # commit and add the new Splunk data file to the repo 
       #   with:
       #     message: 'Updated Splunk detection file'
