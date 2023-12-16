@@ -17,7 +17,7 @@ jobs:
           curl -o ./data/splunk-detections.json https://content.splunkresearch.com/detections 
       - name: Add and commit changes
         run: |
-          git config --global user.email "68730121+djjoa@users.noreply.github.com "
+          git config --global user.email "68730121+djjoa@users.noreply.github.com"
           git config --global user.name "djjoa"
 
           git add ./data/splunk-detections.json 
