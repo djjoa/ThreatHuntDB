@@ -8,6 +8,7 @@ jobs:
         uses: actions/checkout@v4 # check out the the ThreatHuntDB repo 
         with:
           persist-credentials: true
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
         
       - shell: bash # query Splunk public API to get latest detections 
         run: |
