@@ -5,19 +5,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # check out the the ThreatHuntDB repo 
         with:
           persist-credentials: false
+        
+      - shell: bash # query Splunk public API to get latest detections 
+        run: |
+          curl -o ./data/splunk-detections.json https://content.splunkresearch.com/detections 
+      
+      - uses: EndBug/add-and-commit@v9 # commit and add the new Splunk data file to the repo 
+        with:
+          message: 'Updated Splunk detection file'
+          add: './data/splunk-detections.json --force'
+          
 
-      - name: Fetch API Data 📦
-        uses: JamesIves/fetch-api-data-action@v2.4.0
-        with:
-          ENDPOINT: https://content.splunkresearch.com/detections
-          retry: true
-      - name: Build and Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
-        with:
-          ssh-key: ${{ secrets.DEPLOY_KEY }}
-          branch: main # Pushes the updates to the master branch.
-          folder: fetch-api-data-action # The location of the data.json file saved by the Fetch API Data action.
-          target-folder: data # Saves the data into the 'data' directory on the master branch.
+
+
