@@ -1,0 +1,3 @@
+[submodule "Azure-Sentinel"]
+	path = Azure-Sentinel
+	url = https://github.com/Azure/Azure-Sentinel.git
