@@ -1,3 +1,9 @@
 [submodule "Azure-Sentinel"]
 	path = Azure-Sentinel
 	url = https://github.com/Azure/Azure-Sentinel.git
+[submodule "security_content"]
+	path = security_content
+	url = https://github.com/splunk/security_content.git
+[submodule "security_content.wiki"]
+	path = security_content.wiki
+	url = https://github.com/splunk/security_content.wiki.git
