@@ -1,0 +1,14 @@
+---
+id: f8e4bee5-bc59-45f9-86e5-3b0a1bd1b572
+name: Stopping multiple processes using taskkill
+description: |
+  This query checks for attempts to stop at least 10 separate processes using the taskkill.exe utility. Run query
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceProcessEvents
+tactics:
+  - Ransomware
+query: "```kusto\n// Find attempts to stop processes using taskkill.exe\nDeviceProcessEvents\n| where Timestamp > ago(1d)\n| where FileName =~ \"taskkill.exe\" \n| summarize taskKillCount = dcount(ProcessCommandLine), TaskKillList = make_set(ProcessCommandLine) by DeviceId, bin(Timestamp, 2m)\n| where taskKillCount > 10\n```"
+---
+

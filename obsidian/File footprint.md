@@ -1,0 +1,18 @@
+---
+id: 20f3eec2-63e5-459c-aa61-64996ee2971d
+name: File footprint
+description: |
+  Query #1 - Find the machines on which this file was seen.
+  TODO - set file hash to be a SHA1 hash of your choice...
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceFileEvents
+      - DeviceProcessEvents
+      - DeviceEvents
+      - DeviceRegistryEvents
+      - DeviceNetworkEvents
+      - DeviceImageLoadEvents
+query: "```kusto\nlet fileHash = \"e152f7ce2d3a4349ac583580c2caf8f72fac16ba\";\nfind in (DeviceFileEvents, DeviceProcessEvents, DeviceEvents, DeviceRegistryEvents, DeviceNetworkEvents, DeviceImageLoadEvents)\nwhere SHA1 == fileHash or InitiatingProcessSHA1 == fileHash\nproject DeviceName, ActionType, FileName, InitiatingProcessFileName, Timestamp, SHA1, InitiatingProcessSHA1\n| project DeviceName, ActionType, Timestamp, \n          FileName = iff(SHA1 == fileHash, FileName, InitiatingProcessFileName),\n          MatchedSide=iff(SHA1 == fileHash, iff(InitiatingProcessSHA1 == fileHash, \"Both\", \"Child\"), \"Parent\")\n| summarize makeset(ActionType), FirstTimestamp=min(Timestamp), (LastTimestamp, LastActionType)=arg_max(Timestamp, ActionType) by FileName, MatchedSide, DeviceName\n| top 1000 by LastTimestamp desc\n| sort by DeviceName, LastTimestamp desc\n```"
+---
+

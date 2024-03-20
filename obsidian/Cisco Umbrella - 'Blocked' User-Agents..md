@@ -1,0 +1,20 @@
+---
+id: 22e5e573-409b-433f-91de-50d6f0ad5a9e
+name: Cisco Umbrella - 'Blocked' User-Agents.
+description: |
+  'Shows User-Agent values which requests were blocked'
+requiredDataConnectors: []
+tactics:
+  - Exfiltration
+relevantTechniques:
+  - T1020
+query: |-
+  ```kusto
+  Cisco_Umbrella
+  | where TimeGenerated > ago(24h)
+  | where DvcAction =~ 'Blocked'
+  | summarize count() by HttpUserAgentOriginal
+  | sort by count_
+  ```
+---
+

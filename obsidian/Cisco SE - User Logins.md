@@ -1,0 +1,29 @@
+---
+id: 987681e4-3f0f-484c-95c1-88044b07759b
+name: Cisco SE - User Logins
+description: |
+  'Query searches for user logins to management console.'
+severity: Low
+requiredDataConnectors:
+  - connectorId: CiscoSecureEndpoint
+    dataTypes:
+      - CiscoSecureEndpoint
+tactics:
+  - InitialAccess
+relevantTechniques:
+  - T1078
+query: |-
+  ```kusto
+  CiscoSecureEndpoint
+  | where TimeGenerated > ago(24h)
+  | where EventSubType =~ 'User'
+  | where EventMessage =~ 'login'
+  | extend AccountCustomEntity = SrcUserName
+  ```
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: FullName
+        columnName: AccountCustomEntity
+---
+

@@ -1,0 +1,15 @@
+---
+id: e10dd84f-e4d6-4b21-a9da-816699de0ba8
+name: Machine info from IP address (3)
+description: |
+  The following queries pivot from an IP address assigned to a machine to the relevant machine or logged-on users.
+  To read more about it, check out this post: https://techcommunity.microsoft.com/t5/What-s-New/Advanced-hunting-now-includes-network-adapters-information/m-p/224402#M74.
+  Query #1: get machines that have used a given local IP address at a given time - as configured on their network adapters.
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceNetworkInfo
+      - DeviceInfo
+query: "```kusto\n// Query #4: Get machines that have used a given IP address, looking up on both local and external addresses.\n//           This includes IP addresses seen locally in their network adapters configuration or ones used to access the WDATP cloud.\nlet pivotTimeParam = datetime(2018-07-15 19:51:00);\nlet ipAddressParam = \"192.168.1.5\";\nDeviceNetworkInfo\n| where Timestamp between ((pivotTimeParam-15m) ..30m) and IPAddresses contains strcat(\"\\\"\", ipAddressParam, \"\\\"\") and NetworkAdapterStatus == \"Up\"\n| project DeviceName, Timestamp, Source=\"NetworkAdapterInfo\" \n| union (DeviceInfo | where Timestamp between ((pivotTimeParam-15m) .. 30m) and PublicIP == ipAddressParam | project DeviceName, Timestamp, Source=\"Public IP address\")\n| extend TimeDifference=abs(Timestamp-pivotTimeParam)\n| sort by TimeDifference asc\n```"
+---
+

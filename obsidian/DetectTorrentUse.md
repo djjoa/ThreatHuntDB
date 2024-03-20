@@ -1,0 +1,12 @@
+---
+id: 4011047d-6a0b-4ef0-bf62-d3eda0784e15
+name: DetectTorrentUse
+description: |
+  Custom detection to find use of torrenting software or browsing related to torrents.
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceNetworkEvents
+query: "```kusto\nDeviceNetworkEvents \n| where Timestamp > ago(7d)\n| where RemoteUrl has \"torrent\" or RemoteUrl has \"vuze\" or RemoteUrl has \"azureus\" or RemoteUrl endswith \".tor\" or InitiatingProcessFileName has \"torrent\" or InitiatingProcessFileName has \"vuze\" or InitiatingProcessFileName contains \"azureus\" \n| project Timestamp, ReportId, DeviceId, DeviceName, InitiatingProcessFileName, RemoteUrl , RemoteIP , RemotePort  \n```"
+---
+

@@ -1,0 +1,13 @@
+{
+  "propertiesInDocument": "source",
+  "showUnsupportedFiles": true,
+  "attachmentFolderPath": "./attachments",
+  "tabSize": 4,
+  "readableLineLength": false,
+  "pdfExportSettings": {
+    "pageSize": "Letter",
+    "landscape": true,
+    "margin": "0",
+    "downscalePercent": 100
+  }
+}

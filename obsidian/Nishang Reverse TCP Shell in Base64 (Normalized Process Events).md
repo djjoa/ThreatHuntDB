@@ -1,0 +1,23 @@
+---
+id: 3a8e307b-5037-4182-a4e2-e76d99cecab8
+name: Nishang Reverse TCP Shell in Base64 (Normalized Process Events)
+description: |
+  'Looks for Base64-encoded commands associated with the Nishang reverse TCP shell.
+  Ref: https://github.com/samratashok/nishang/blob/master/Shells/Invoke-PowerShellTcp.ps1'
+requiredDataConnectors: []
+tactics:
+  - Exfiltration
+relevantTechniques:
+  - T1011
+query: "```kusto\nimProcessCreate\n| where Process has_any (\"powershell.exe\",\"powershell_ise.exe\") and CommandLine contains \"-e\" \n| mvexpand SS = split(CommandLine, \" \") \n| where SS matches regex \"[A-Za-z0-9+/]{50,}[=]{0,2}\" \n| extend DecodeString = base64_decode_tostring(tostring(SS)) \n| extend FinalString = replace(\"\\\\0\", \"\", DecodeString) \n| where FinalString has \"tcpclient\" and FinalString contains \"$\" and (FinalString contains \"invoke\" or FinalString contains \"iex\") \n| extend timestamp = TimeGenerated, AccountCustomEntity = User, HostCustomEntity = Dvc\n```"
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: FullName
+        columnName: AccountCustomEntity
+  - entityType: Host
+    fieldMappings:
+      - identifier: FullName
+        columnName: HostCustomEntity
+---
+

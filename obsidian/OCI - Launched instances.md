@@ -1,0 +1,28 @@
+---
+id: 3df69415-2dec-4457-9433-97a3c15a4b70
+name: OCI - Launched instances
+description: |
+  'Query searches for new launched instances.'
+severity: Medium
+requiredDataConnectors:
+  - connectorId: OracleCloudInfrastructureLogsConnector
+    dataTypes:
+      - OCILogs
+tactics:
+  - Impact
+relevantTechniques:
+  - T1499
+query: |-
+  ```kusto
+  OCILogs
+  | where TimeGenerated > ago(24h)
+  | where EventType endswith 'LaunchInstance'
+  | extend AccountCustomEntity = data_definedTags_Oracle_Tags_CreatedBy_s
+  ```
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: Name
+        columnName: AccountCustomEntity
+---
+

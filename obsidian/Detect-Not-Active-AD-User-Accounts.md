@@ -1,0 +1,13 @@
+---
+id: 9131b716-334f-416e-a50f-809927d63b42
+name: Detect-Not-Active-AD-User-Accounts
+description: |
+  // Detect Active Directory service accounts that are not active because their last logon was more than 14 days ago
+  // Replace XXX on line 4 with the naming convention start of your Active Directory service accounts
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - IdentityLogonEvents
+query: "```kusto\nIdentityLogonEvents \n| project Timestamp, AccountName, DeviceName, LogonType\n| where AccountName startswith \"XXX\" \n| summarize LastLogon = max(Timestamp) by AccountName, LogonType, DeviceName\n| where LastLogon < ago(14d)\n```"
+---
+

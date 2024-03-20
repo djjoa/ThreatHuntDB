@@ -1,0 +1,16 @@
+---
+id: 57ada8d5-7a26-4440-97fd-32c5c3fd0421
+name: Dangerous emails with links clicked
+description: |
+  'This will check for emails that Defend has identified as dangerous and a user has clicked a link.'
+requiredDataConnectors:
+  - connectorId: EgressDefend
+    dataTypes:
+      - EgressDefend_CL
+tactics:
+  - Collection
+relevantTechniques:
+  - T1039
+query: "```kusto\nEgressDefend_CL \n| where event_s == \"linkClick\" \n| where email_threat_s == \"dangerous\"\n```"
+---
+

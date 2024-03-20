@@ -1,0 +1,13 @@
+---
+id: 04990281-436c-4dff-aff9-bcd4417d0937
+name: apt unidentified nov 18
+description: |
+  Original Sigma Rule: https://github.com/Neo23x0/sigma/blob/master/rules/apt/apt_unidentified_nov_18.yml.
+  Questions via Twitter: @janvonkirchheim.
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceProcessEvents
+query: "```kusto\nDeviceProcessEvents \n| where Timestamp > ago(7d)\n| where ProcessCommandLine endswith \"cyzfc.dat, PointFunctionCall\" \n| top 100 by Timestamp desc\n```"
+---
+

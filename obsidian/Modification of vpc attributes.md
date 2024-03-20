@@ -1,0 +1,26 @@
+---
+id: a3a19731-9e82-49b6-9142-2dd570feefd5
+name: Modification of vpc attributes
+description: |
+  'An attacker could modify vpc attributesin order to access resources he couldn't access before.'
+severity: Low
+requiredDataConnectors:
+  - connectorId: AWS
+    dataTypes:
+      - AWSCloudTrail
+tactics:
+  - Defense Evasion
+relevantTechniques:
+  - T1562
+query: "```kusto\nAWSCloudTrail\n| where  EventName == \"ModifyVpcAttribute\" and isempty(ErrorCode) and isempty(ErrorMessage)\n| project TimeGenerated, EventName, EventTypeName, UserIdentityAccountId, UserIdentityPrincipalid, UserAgent, \nUserIdentityUserName, SessionMfaAuthenticated, SourceIpAddress, AWSRegion, EventSource, UserIdentityArn, AdditionalEventData, ResponseElements\n| extend UserIdentityUserName = iff(isnotempty(UserIdentityUserName), UserIdentityUserName, tostring(split(UserIdentityArn,'/')[-1]))\n| extend timestamp = TimeGenerated, IPCustomEntity = SourceIpAddress, AccountCustomEntity = UserIdentityUserName\n```"
+entityMappings:
+  - entityType: Account
+    fieldMappings:
+      - identifier: FullName
+        columnName: AccountCustomEntity
+  - entityType: IP
+    fieldMappings:
+      - identifier: Address
+        columnName: IPCustomEntity
+---
+

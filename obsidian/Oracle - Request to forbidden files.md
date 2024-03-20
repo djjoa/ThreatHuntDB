@@ -1,0 +1,30 @@
+---
+id: 5c2f090d-2072-4ad9-a749-394593d7091b
+name: Oracle - Request to forbidden files
+description: |
+  'Query shows request to forbidden files.'
+severity: Medium
+requiredDataConnectors:
+  - connectorId: OracleWebLogicServer
+    dataTypes:
+      - OracleWebLogicServerEvent
+tactics:
+  - InitialAccess
+relevantTechniques:
+  - T1190
+  - T1133
+query: |-
+  ```kusto
+  OracleWebLogicServerEvent
+  | where TimeGenerated > ago(24h)
+  | where HttpStatusCode == 403
+  | extend File = extract(@"(.*\/)?(.*)", 2, tostring(UrlOriginal))
+  | extend FileCustomEntity = File
+  ```
+entityMappings:
+  - entityType: File
+    fieldMappings:
+      - identifier: Name
+        columnName: FileCustomEntity
+---
+

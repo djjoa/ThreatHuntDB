@@ -1,0 +1,19 @@
+---
+id: 4e186f05-8cff-4afa-a0c8-4f0f0e7aeb82
+name: launch-questd-w-osascript
+description: |
+  This query was originally published in the threat analytics report, EvilQuest signals the rise of Mac ransomware.
+  As of the time of this writing (October 2020), ransomware designed to target macOS is relatively rare. EvilQuest is one of the few examples of this kind of malware on the platform.
+  The query below can detect events associated with the launch of the EvilQuest executable, questd, from the shell.
+  Other queries related to EvilQuest ransomware can be found under the See also section below.
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceFileEvents
+      - DeviceProcessEvents
+tactics:
+  - Execution
+  - Impact
+query: "```kusto\nunion DeviceFileEvents, DeviceProcessEvents  \n| where Timestamp >= ago(7d)  \n| where ProcessCommandLine has \"osascript -e do shell script \\\"launchctl load\" and  \nProcessCommandLine contains \"questd\"\n```"
+---
+

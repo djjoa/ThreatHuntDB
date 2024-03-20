@@ -1,0 +1,20 @@
+---
+id: afa7c7b7-7d1f-4898-9daf-b35500ff8f2f
+name: Suspicious process event creation from VMWare Horizon TomcatService
+description: |
+  Microsoft has observed attackers who have gained entry to an environment via the Log4J vulnerability utilizing the ws_TomcatService.exe process to launch malicious processes.
+requiredDataConnectors:
+  - connectorId: MicrosoftThreatProtection
+    dataTypes:
+      - DeviceProcessEvents
+tactics:
+  - Execution
+  - Vulnerability
+query: |-
+  ```kusto
+  DeviceProcessEvents
+  | where InitiatingProcessFileName has "ws_TomcatService.exe"
+  | where FileName != "repadmin.exe"
+  ```
+---
+
