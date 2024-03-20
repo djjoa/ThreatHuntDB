@@ -1,1 +1,0 @@
-echo "I'm a custom script and I can read variables assigned via env: like env.DERP ($DERP)"

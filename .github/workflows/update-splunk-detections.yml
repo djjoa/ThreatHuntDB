@@ -10,8 +10,7 @@ jobs:
         uses: actions/checkout@v4 # check out the the ThreatHuntDB repo 
         with:
           token: ${{ secrets.TOKEN }}
-          #persist-credentials: true
-          #ssh-key: ${{ secrets.DEPLOY_KEY }}
+
         
       #- shell: bash # query Splunk public API to get latest detections 
       - name: Get Splunk detections with curl
@@ -19,17 +18,13 @@ jobs:
           curl -o ./data/splunk-detections.json https://content.splunkresearch.com/detections 
       - name: Add and commit changes
         run: |
-          git config --global user.email "68730121+djjoa@users.noreply.github.com"
-          git config --global user.name "djjoa"
+          git config --global user.email "<github email>" # change me 
+          git config --global user.name "<github name>" # change me 
 
           git add ./data/splunk-detections.json 
           git commit -m "Updated ThreatHuntDB with latest Splunk detections and hunts."
           git push 
 
-      # - uses: EndBug/add-and-commit@v9 # commit and add the new Splunk data file to the repo 
-      #   with:
-      #     message: 'Updated Splunk detection file'
-      #     add: './data/splunk-detections.json --force'
           
 
 

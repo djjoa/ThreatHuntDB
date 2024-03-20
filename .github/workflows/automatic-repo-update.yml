@@ -36,15 +36,3 @@ jobs:
           commit-message: "testing deployment" #msg
           folder: data
           ssh-key: ${{ secrets.DEPLOY_KEY }} 
-          
-      # - name: Switch from HTTPs to SSH 
-      #   run: git remote set-url origin ${{ secrets.ssh_url }}
-        
-      # - name: Push to repository
-      #   run: |
-      #     git config --global user.name "threathuntdb-actionbot"
-      #     git config --global user.email threathuntdb-actionbot"@github.com"
-      #     now=$(date)
-      #     git add -A
-      #     git commit -m "Auto Push on $now"
-      #     git push
